@@ -1,0 +1,18 @@
+# config.yaml.example
+# 이 파일을 복사해서 config.yaml 로 저장한 뒤 값을 채우세요.
+# 토큰은 config.yaml 에 직접 넣는 대신 THREADS_ACCESS_TOKEN 환경 변수로 전달하는 것을 권장합니다.
+# (config.yaml 은 .gitignore 에 포함되어 있습니다.)
+
+threads:
+  access_token: ""   # Meta Graph API 장기 액세스 토큰
+
+brand:
+  vision: ""
+  content_topics:
+    authenticity: []
+    authority: []
+    growth: []
+  target_pains: []
+  writing_style:
+    tone: []
+    avoids: []

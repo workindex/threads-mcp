@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env.local
+.env
+*.log
+.DS_Store
+
+# 로컬 설정 (액세스 토큰 포함 — 절대 커밋 금지)
+config.yaml
+
+# 수집 데이터 / wiki 출력 (로컬 전용)
+threads/raw/
+threads/wiki/posts/
+threads/wiki/drafts/
