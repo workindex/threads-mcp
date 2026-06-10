@@ -4,9 +4,17 @@ import type { Post, Reply } from '../stores/store'
 
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/
 
+// KST(UTC+9) 기준 날짜 반환
 function safeDate(raw: string): string {
-  const d = (raw ?? '').slice(0, 10)
-  return ISO_DATE_RE.test(d) ? d : 'unknown-date'
+  if (!raw) return 'unknown-date'
+  const d = new Date(raw)
+  d.setHours(d.getHours() + 9)
+  const kst = d.toISOString().slice(0, 10)
+  return ISO_DATE_RE.test(kst) ? kst : 'unknown-date'
+}
+
+function todayKst(): string {
+  return safeDate(new Date().toISOString())
 }
 
 export function slugify(text: string): string {
@@ -44,7 +52,7 @@ export function generateWikiNote(
   postReplies: Reply[] // root_post_id === rootPost.id인 댓글들
 ): string {
   const date = safeDate(rootPost.posted_at ?? '')
-  const today = new Date().toISOString().slice(0, 10)
+  const today = todayKst()
   const title = (rootPost.text ?? '').split('\n')[0]?.trim().slice(0, 80) || '(제목 없음)'
   const tagsArr = rootPost.content_context ? [`"${rootPost.content_context}"`] : []
   const baseFilename = `${date}-${slugify(rootPost.text ?? '')}`
@@ -87,7 +95,7 @@ export function generateWikiNote(
   if (chainPosts.length > 0) {
     sections.push('', '## 이어진 글', '')
     for (const p of chainPosts) {
-      sections.push(`### ${p.posted_at.slice(0, 10)}`, '', p.text ?? '', '')
+      sections.push(`### ${safeDate(p.posted_at)}`, '', p.text ?? '', '')
     }
   }
 
@@ -114,7 +122,6 @@ export function generateWikiNote(
     '## 관련',
     '',
     '- 주제: [[topics/]]',
-    `- raw: [[raw/my-posts/${baseFilename}]]`,
     '',
     '## 사고 연결',
     '',
@@ -166,7 +173,7 @@ export function exportPostsToWiki(
   let created = 0
   let updated = 0
   let skipped = 0
-  const today = new Date().toISOString().slice(0, 10)
+  const today = todayKst()
   const indexRows: string[] = []
 
   for (const rootPost of rootPosts) {
