@@ -122,6 +122,7 @@ export function generateWikiNote(
     '## 관련',
     '',
     '- 주제: [[topics/]]',
+    '- 연관 포스트: [[posts/]]',
     '',
     '## 사고 연결',
     '',
